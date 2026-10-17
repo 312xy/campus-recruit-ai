@@ -1,0 +1,51 @@
+server:
+  port: 8080
+
+ai:
+  # Key 从环境变量读取，不在代码/仓库里硬编码
+  api-key: ${DEEPSEEK_API_KEY:}
+  base-url: https://api.deepseek.com/v1
+  model: deepseek-chat
+
+spring:
+  # 自动加载项目目录下的 .env（KEY=VALUE 格式）。
+  # 作用：不管你怎么启动——IDEA 直接点运行、java -jar、脚本拉起——都能读到
+  # DEEPSEEK_API_KEY / JWT_SECRET，不用再手动配环境变量。
+  # optional 表示文件不存在也不报错；配合下面 ${DEEPSEEK_API_KEY:} 的默认值兜底。
+  # 注意：.env 已在 .gitignore 里，不会进仓库；文件必须用 LF 换行（CRLF 会让 Key 末尾
+  # 多个不可见 \r，调 API 时报 401）。
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    url: jdbc:h2:mem:campusdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  # 启动时自动执行 schema.sql 建表（H2 内存库每次重启会清空，开发没问题）
+  sql:
+    init:
+      mode: always
+  mvc:
+    # 访问了不存在的接口时，抛 NoHandlerFoundException 交给 GlobalExceptionHandler 处理，
+    # 这样前端收到的 404 也是统一的 {"error":"..."} 中文格式，而不是 Spring 默认的一坨英文。
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      # 配合上一项：关闭默认的静态资源映射（默认情况下所有未匹配路径都会被它当成静态资源
+      # 去查文件，导致永远不会抛异常）。本项目是前后端分离、后端不提供任何静态页面，
+      # 所以关掉它没有副作用；如果将来要把前端打包产物放进后端 static 目录，需改回 true。
+      add-mappings: false
+  # 文件上传大小限制。这是"服务器侧"的硬限制，
+  # 前端也要做一次校验（体验好），但绝不能只靠前端——前端限制能被绕过。
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 4MB
+  h2:
+    console:
+      enabled: true
+
+jwt:
+  # 默认密钥仅用于本地开发，生产必须用环境变量 JWT_SECRET 覆盖（≥32字节）
+  secret: ${JWT_SECRET:campus-recruit-ai-dev-secret-key-please-change-me-2026}
+  expiration-ms: 86400000

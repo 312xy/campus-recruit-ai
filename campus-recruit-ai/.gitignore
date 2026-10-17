@@ -1,0 +1,12 @@
+target/
+*.iml
+.idea/
+.env
+application-local.yml
+
+# 运行期产生的数据与日志
+# data/ 是 H2 本地库，里面存着注册用户和简历原文，不能上传
+data/
+*.mv.db
+*.trace.db
+*.log

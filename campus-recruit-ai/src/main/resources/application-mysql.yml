@@ -1,0 +1,38 @@
+# MySQL profile 配置：用 --spring.profiles.active=mysql 启用
+# 用法（在你电脑上的 PowerShell 或 cmd）：
+#   mvn spring-boot:run -Dspring-boot.run.profiles=mysql
+# 或先把项目打成 jar：
+#   mvn package -DskipTests
+#   java -jar target/campus-recruit-ai-0.0.1-SNAPSHOT.jar --spring.profiles.active=mysql
+# 不用每次都带，因为 application.yml 是 H2 默认值。
+#
+# ⚠️ 第一次使用前先在 MySQL 里手动建库：
+#   CREATE DATABASE campus_recruit DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+spring:
+  datasource:
+    # 关键参数解释（面试可讲）：
+    # - useUnicode=true&characterEncoding=utf8：显式走 UTF-8，否则默认 latin1 → 中文乱码
+    # - serverTimezone=Asia/Shanghai：MySQL 8 驱动要求显式时区（否则报 you must configure ... serverTimezone）
+    # - useSSL=false&allowPublicKeyRetrieval=true：本地明文账号，禁用 SSL 协商方便调试
+    # - useSSL=false 是开发用；生产必须 useSSL=true
+    url: jdbc:mysql://localhost:3306/campus_recruit?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: "123456"
+  sql:
+    init:
+      # mode=always + schema-locations：每次启动自动执行 schema-mysql.sql 建表
+      # CREATE TABLE IF NOT EXISTS 不会清空已有数据，安全
+      mode: always
+      schema-locations: classpath:schema-mysql.sql
+  h2:
+    console:
+      # 用 MySQL 时关掉 H2 控制台，少一个干扰
+      enabled: false
+
+# ——【可选】用环境变量覆盖密码，避免密码硬编码到 yml 里被上传 git ——
+#   PowerShell:  $env:DB_PASSWORD="123456"
+#   cmd:         set DB_PASSWORD=123456
+#   bash:        export DB_PASSWORD=123456
+# 这样 yml 里就可以写 password: ${DB_PASSWORD}
+# 现在写的是开发默认值，正式提交代码前强烈建议改成环境变量。

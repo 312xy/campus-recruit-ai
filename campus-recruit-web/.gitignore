@@ -1,0 +1,14 @@
+node_modules
+dist
+dist-ssr
+dist-check
+dist-check-job
+*.local
+.DS_Store
+.vite
+npm-debug.log*
+yarn-error.log*
+
+# 运行日志与 Vite 临时文件
+*.log
+vite.config.js.timestamp-*

@@ -1,0 +1,242 @@
+/* ================================================================
+   全局样式系统（设计 Token + 通用样式）
+   --------------------------------------------------------------
+   这一文件定义了项目的"皮肤"，所有页面共用同一套色板/圆角/阴影，
+   想调整全站风格只改这里即可。
+   ================================================================ */
+
+:root {
+  /* 品牌色 - 紫蓝调，年轻、AI 感 */
+  --brand-50:  #EEF2FF;
+  --brand-100: #E0E7FF;
+  --brand-200: #C7D2FE;
+  --brand-500: #6366F1;
+  --brand-600: #4F46E5;
+  --brand-700: #4338CA;
+
+  /* 辅助色 - 青色，渐变点缀 */
+  --accent-500: #06B6D4;
+
+  /* 强调色 - 暖色，点缀 */
+  --warn-500: #F59E0B;
+  --warn-50:  #FFFBEB;
+
+  /* 状态色 */
+  --success-500: #10B981;
+  --success-50:  #ECFDF5;
+  --danger-500:  #EF4444;
+  --danger-50:   #FEF2F2;
+
+  /* 中性色 - 文本与背景 */
+  --ink-900: #111827;
+  --ink-700: #374151;
+  --ink-500: #6B7280;
+  --ink-300: #D1D5DB;
+  --ink-100: #F3F4F6;
+  --ink-50:  #F9FAFB;
+
+  /* 玻璃背景：透明 + 模糊，用于侧边栏头部 */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+
+  /* 渐变 */
+  --grad-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #06B6D4 100%);
+  --grad-primary-soft: linear-gradient(135deg, #EEF2FF 0%, #F0F9FF 100%);
+  --grad-warm: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+  --grad-success: linear-gradient(135deg, #10B981 0%, #06B6D4 100%);
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 20px rgba(99, 102, 241, 0.08);
+  --shadow-lg: 0 8px 40px rgba(99, 102, 241, 0.15);
+  --shadow-xl: 0 20px 50px rgba(99, 102, 241, 0.20);
+
+  /* 圆角 */
+  --r-xs: 6px;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 24px;
+  --r-full: 999px;
+}
+
+/* 全局基础 */
+html, body, #app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  color: var(--ink-900);
+  background: var(--ink-50);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Element Plus 主题覆盖 - 主色调和按钮 */
+:root {
+  --el-color-primary: #6366F1;
+  --el-color-primary-light-3: #818CF8;
+  --el-color-primary-light-5: #A5B4FC;
+  --el-color-primary-light-7: #C7D2FE;
+  --el-color-primary-light-9: #EEF2FF;
+  --el-color-primary-dark-2: #4338CA;
+  --el-border-radius-base: 8px;
+}
+
+/* 通用"卡片化"组件风格 */
+.pretty-card {
+  background: #fff;
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(99, 102, 241, 0.06);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.pretty-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+/* "渐变文字" - 用于大数字 / 标签 */
+.gradient-text {
+  background: var(--grad-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+}
+
+/* 渐变按钮（覆盖 Element Plus 默认蓝） */
+.btn-gradient {
+  background: var(--grad-primary);
+  border: none;
+  color: #fff !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn-gradient:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4) !important;
+  opacity: 0.95;
+}
+
+/* 通用工具类 */
+.muted { color: var(--ink-500); }
+.text-brand { color: var(--brand-500); }
+.text-amber { color: var(--warn-500); }
+.text-success { color: var(--success-500); }
+.flex { display: flex; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.gap-8 { gap: 8px; } .gap-12 { gap: 12px; } .gap-16 { gap: 16px; } .gap-24 { gap: 24px; }
+
+/* 全局滚动条美化 */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.25);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(99, 102, 241, 0.5); }
+
+/* Element Plus 卡片圆角统一 */
+.el-card { border-radius: var(--r-md) !important; }
+
+/* Element Plus 按钮主色 hover 效果 */
+.el-button--primary {
+  background: var(--brand-500);
+  border-color: var(--brand-500);
+}
+.el-button--primary:hover {
+  background: var(--brand-600);
+  border-color: var(--brand-600);
+}
+
+/* 全局页面进入动画 */
+.fade-in {
+  animation: fadeIn 0.35s ease both;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ================================================================
+   移动端基础层（≤768px）
+   --------------------------------------------------------------
+   这里只放"所有页面都该遵守"的规则：字号、触控尺寸、表格滚动、
+   Element Plus 弹窗宽度。单个页面的布局调整写在各自组件的
+   <style scoped> 里，避免这里变成一个什么样式都往里塞的垃圾堆。
+   ================================================================ */
+@media (max-width: 768px) {
+  /* 手机上把根字号回调到 15px：桌面 16px 在窄屏会显得字大行挤 */
+  html { font-size: 15px; }
+
+  /* iOS Safari 在字号 < 16px 的输入框里会自动放大页面，很烦。
+     把输入类元素强行拉到 16px，用户点输入框时就不会跳缩放。 */
+  input,
+  textarea,
+  select,
+  .el-input__inner,
+  .el-textarea__inner {
+    font-size: 16px !important;
+  }
+
+  /* 触控目标最小 40px：手指按 32px 的小按钮很容易点空 */
+  .el-button {
+    min-height: 40px;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  .el-button--small {
+    min-height: 34px;
+  }
+  /* 表格里的"查看/删除"这种文字按钮，不要撑成一个高方块 */
+  .el-button.is-link {
+    min-height: auto;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  /* 表格：手机上永远无法两全（列多、宽度不够），
+     与其把列压到读不出来，不如让它横向滚动。
+     el-table 内部这层 .el-scrollbar / .el-table__body-wrapper 本身就是
+     overflow-x: auto，这里只是把触摸惯性滚动和最小列宽补上。 */
+  .el-table {
+    font-size: 12px;
+  }
+  .el-table .cell {
+    padding-left: 8px;
+    padding-right: 8px;
+    word-break: break-word;
+  }
+  .el-table__body-wrapper,
+  .el-table__header-wrapper {
+    -webkit-overflow-scrolling: touch;
+  }
+  /* 手机上表格下方的白色占位（空数据高度）不要太高 */
+  .el-empty { padding: 24px 0 !important; }
+  .el-empty__image { width: 70px !important; }
+
+  /* 弹窗：手机上占满宽度，两侧留一点点边距 */
+  .el-dialog {
+    width: calc(100vw - 32px) !important;
+    max-width: 460px;
+    margin-top: 12vh !important;
+  }
+  .el-message-box {
+    width: calc(100vw - 40px) !important;
+    max-width: 420px;
+  }
+  /* 抽屉式弹层（选岗位的长下拉）不要贴着屏幕边 */
+  .el-select-dropdown {
+    max-width: calc(100vw - 24px);
+  }
+
+  /* 卡片在手机上少一点圆角，视觉上更"贴屏幕" */
+  .pretty-card { border-radius: 12px; }
+
+  /* 滚动条在手机上本来就不显示，别浪费渲染 */
+  ::-webkit-scrollbar { width: 0; height: 0; }
+}

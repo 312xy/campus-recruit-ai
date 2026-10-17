@@ -1,0 +1,53 @@
+# ============================================================
+# 生产环境 profile：通过 --spring.profiles.active=prod 激活
+# 与默认配置(application.yml)的差异：
+#   - H2 改文件模式（mem 模式重启丢数据）
+#   - 关闭 H2 控制台（公网暴露是巨大安全隐患）
+#   - 调整文件上传上限（演示用没必要放那么大）
+#   - 调整 JWT 过期时间（演示场景 7 天更友好）
+# 使用方式（在你的 Windows PowerShell / Git Bash 里）：
+#   java -jar campus-recruit-ai-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+# 或者开发用：
+#   mvn spring-boot:run -Dspring-boot.run.profiles=prod
+# ============================================================
+
+spring:
+  # WebMvc 配置（prod 才覆盖默认；默认配置为了 GlobalExceptionHandler 能接到 404 故意关掉）
+  mvc:
+    # 关闭"找不到处理器时抛异常"——SPA fallback 需要它返回 index.html 而不是抛 NoHandlerFoundException
+    throw-exception-if-no-handler-found: false
+  web:
+    resources:
+      # 生产环境开启静态资源映射（让 WebConfig 把 classpath:/static/ 下的前端产物 serve 出去）
+      add-mappings: true
+  datasource:
+    # 文件模式：./data/campusdb.mv.db 会创建在程序工作目录下
+    # AUTO_SERVER=TRUE 允许多进程同时访问（H2 web console + 后端）
+    # DB_CLOSE_DELAY=-1 保持 JVM 退出前数据库连接存活
+    url: jdbc:h2:file:./data/campusdb;AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1;MODE=MySQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  sql:
+    init:
+      mode: always
+      # 生产环境如果数据稳定后，可以改成 embedded only（只对嵌入式数据库执行 schema.sql）
+      # 但本项目演示用，保留 always 也无害（H2 会用 IF NOT EXISTS 判断）
+  h2:
+    console:
+      # 【重要】生产关闭！否则任何人都能通过 /h2-console 操作数据库
+      enabled: false
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 2MB
+
+# JWT：演示场景延长到 7 天，避免每次演示都要重新登录
+jwt:
+  expiration-ms: 604800000
+
+# 日志：生产环境调高 INFO 级别，开发期可以是 DEBUG
+logging:
+  level:
+    root: INFO
+    com.campusrecruit: INFO
